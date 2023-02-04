@@ -1,23 +1,50 @@
 import random
+import atleta
+import sys
 
 from deap import base
 from deap import creator
 from deap import tools
 
-IND_SIZE = 6
+import eserciziPopulator
 
-creator.create("FitnessMulti", base.Fitness, weights=(1.0, 1.0))
-creator.create("Individual", list, fitness=creator.FitnessMulti)
+myAtleta = atleta.Atleta()
 
-toolbox = base.Toolbox()
-toolbox.register("attr_int", random.randint, 0, 89)
-toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_int, n=IND_SIZE)
 
-toolbox.register("mate", tools.cxTwoPoint)
-toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=1, indpb=0.1)
-toolbox.register("select", tools.selTournament, tournsize=3)
 
-ind1 = toolbox.individual()
+def inserisciInfoAtleta():
+    nome = input("Inserisci il tuo nome: ")
+    peso = int(input("Inserisci il tuo peso (in kg): "))
+    altezza = int(input("Inserisci la tua altezza (in cm): "))
+    mesiEsperienza = int(input("Inserisci i tuoi mesi di esperienza nel fitness: "))
 
-print(ind1)
-print(ind1.fitness.valid)
+    myAtleta.nome = nome
+    myAtleta.peso = peso
+    myAtleta.altezza = altezza
+    myAtleta.mesiEsperienza = mesiEsperienza
+
+
+def menu():
+    while True:
+        print("VIRTUAL TRAINER")
+        print("0. Esci")
+        print("1. Inserisci informazioni atleta")
+        print("2. Mostra caratteristiche atleta")
+        print("3. Genera una scheda esercizi")
+        n = int(input())
+
+        if n == 0:
+            sys.exit(0)
+
+        if n == 1:
+            inserisciInfoAtleta()
+
+        if n == 2:
+            myAtleta.mostraCaratteristiche()
+
+        if n == 3:
+            print("TODO")
+
+
+menu()
+
