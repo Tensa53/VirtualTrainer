@@ -1,3 +1,5 @@
+from os import truncate
+
 import constants
 class Atleta:
 
@@ -17,16 +19,7 @@ class Atleta:
 
     def areFeaturesEmpty(self):
         val = bool(self.IMC == 0) and bool(self.livelloEsperienza == 120) and bool(self.esperienza == "") and bool(self.traguardo == "") and  bool(self.messaggio == "") and  bool(self.categoria == "")
-        print(val)
         return val
-
-    def mostraCaratteristiche(self):
-        val = bool(self.areFeaturesEmpty())
-
-        if val:
-            self.calcolaCaratteristiche()
-
-        print(self.printAtleta())
 
     def calcolaCaratteristiche(self):
         self.calcolaIMC()
@@ -46,15 +39,15 @@ class Atleta:
 
     def calcolaLivelloEsperienza(self):
         livelloEsperienza = self.mesiEsperienza * 10
-        self.livelloEsperienza = livelloEsperienza
+        self.livelloEsperienza = constants.ESPERIENZABASE + livelloEsperienza
 
         if livelloEsperienza <= 360:
             self.esperienza = constants.ESPERIENZA[0]
 
-        if livelloEsperienza >= 370 and livelloEsperienza <= 600:
+        if 370 <= livelloEsperienza <= 600:
             self.esperienza = constants.ESPERIENZA[1]
 
-        if livelloEsperienza >= 610 and livelloEsperienza <= 840:
+        if 610 <= livelloEsperienza <= 840:
             self.esperienza = constants.ESPERIENZA[2]
 
         if livelloEsperienza >= 850:
@@ -105,8 +98,11 @@ class Atleta:
 
         return val3
 
-    def printAtleta(self):
-        return "Nome: " + self.nome + "\n" + "Peso (in kg): " + str(self.peso) + "\n" + "Altezza (in cm): " + str(self.altezza) + "\n" + "Indice Massa Corporea (IMC): " + str(self.IMC) + "\n" + "Mesi esperienza: " + str(self.mesiEsperienza) + "\n"\
+    def printAtletaInfoPrompt(self):
+        return "1. Nome: " + self.nome + "\n" + "2. Peso (in kg): " + str(self.peso) + "\n" + "3. Altezza (in cm): " + str(self.altezza) + "\n" + "4. Mesi esperienza: " + str(self.mesiEsperienza)
+
+    def printAtletaFull(self):
+        return "Nome: " + self.nome + "\n" + "Peso (in kg): " + str(self.peso) + "\n" + "Altezza (in cm): " + str(self.altezza) + "\n" + "Indice Massa Corporea (IMC): " + str(self.IMC)[0:6] + "\n" + "Mesi esperienza: " + str(self.mesiEsperienza) + "\n"\
             + "Esperienza: " + self.esperienza + "\n" + "Livello Esperienza: " + str(self.livelloEsperienza) + "\n" + "Traguardo: " + self.traguardo + "\n" + "Categoria: " + self.categoria + "\n" + "Messaggio: " + self.nome + self.messaggio
 
 

@@ -1,5 +1,7 @@
 DIFFICOLTA = ["Facile", "Medio", "Difficile"]
 
+ESPERIENZABASE = 120
+
 LIVELLODIFFICOLTA = [240, 485, 725]
 
 SFIDAMAX = 800.0
