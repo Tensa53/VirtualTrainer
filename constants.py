@@ -1,10 +1,10 @@
-DIFFICOLTA = ["Facile", "Medio", "Difficile"]
-
 ESPERIENZABASE = 120
+
+SFIDAMAX = 800.0
 
 LIVELLODIFFICOLTA = [240, 485, 725]
 
-SFIDAMAX = 800.0
+DIFFICOLTA = ["Facile", "Medio", "Difficile"]
 
 PARTEDELCORPO = ["Petto", "Addome", "Braccia", "Schiena", "Gambe", "TuttoIlCorpo"]
 

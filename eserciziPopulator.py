@@ -12,6 +12,10 @@ class eserciziPopulator:
         self.numeroEsercizi = numeroEsercizi
 
     def populateEsercizi(self):
+        #9 per ogni parte del corpo, 3 per ogni difficolta, totale 45 esercizi anaerobici
+        #15 esercizi aerobici per ogni difficolta, totale 45 esercizi aerobici
+        #in tutto abbiamo 90 esercizi
+
         esercizio0 = esercizio.Esercizio("esercizio0", constants.PARTEDELCORPO[0], constants.DIFFICOLTA[0],
                                          constants.LIVELLODIFFICOLTA[0], constants.TIPOLOGIA[1])
         esercizio1 = esercizio.Esercizio("esercizio1", constants.PARTEDELCORPO[0], constants.DIFFICOLTA[0],
@@ -304,7 +308,7 @@ class eserciziPopulator:
             nome = "esercizio"+str(i)
 
             ind1 = random.randint(0, 5)
-            ind2 = random.randint(0, 1)
+            ind2 = random.randint(0, 2)
             ind3 = random.randint(0, 2)
             ind4 = random.randint(0, 1)
 

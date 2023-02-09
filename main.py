@@ -1,8 +1,6 @@
 import os
 import random
 
-from deap.tools import HallOfFame
-
 import atleta
 import sys
 
@@ -25,33 +23,36 @@ import eserciziPopulator
 #mutation: UniFormInt
 
 #sperimentare cambiando un parametro alla volta
+
 #esperimento 1:
 #select: truncation
 #crossover: twoPoint
 #mutation: UniFormInt
+
 #esperimento 2:
 #select: tournament
 #crossover: onePoint
 #mutation: UniFormInt
+
 #esperimento 3:
 #select: truncation
 #crossover: onePoint
 #mutation: UniFormInt
 
-
-myAtleta = atleta.Atleta()
-eserciziFactory = eserciziPopulator.eserciziPopulator(90)
-eserciziFactory.populateEsercizi()
-
 POPSIZE = 10
+ESPOOLSIZE = 90
 NUMEX = 6
 MATPOOL = 4
 FIRST = False
 CXPB = 0.5
-NGEN = 5
+NGEN = 10
 MTPB = 0.2
 LOW = 0
 UP = 89
+
+myAtleta = atleta.Atleta()
+eserciziPopulator = eserciziPopulator.eserciziPopulator(ESPOOLSIZE)
+eserciziPopulator.populateEsercizi()
 
 
 def calcoloSfida(individual):
@@ -59,7 +60,7 @@ def calcoloSfida(individual):
     avgsfidasum = 0
 
     for i in individual:
-        myEsercizio = eserciziFactory.getEsercizioByID(i)
+        myEsercizio = eserciziPopulator.getEsercizioByID(i)
         sfida = constants.SFIDAMAX - abs(myAtleta.livelloEsperienza - myEsercizio.livellodifficolta)
         sfidasum += sfida
 
@@ -108,7 +109,7 @@ def calcoloAffinita(individual):
     avgaffintasum = 0
 
     for i in individual:
-        fit = affinitaEsercizio(eserciziFactory.getEsercizioByID(i))
+        fit = affinitaEsercizio(eserciziPopulator.getEsercizioByID(i))
         affinitasum += fit
 
     avgaffintasum = affinitasum/len(individual)
@@ -128,18 +129,42 @@ def evaluateInd(individual):
 
 
 def configuraParametriAlgoritmo():
+    #CONFIGURAZIONE DEL TIPO DI FITNES E DI INDIVIDUO
     creator.create("FitnessMulti", base.Fitness, weights=(1.0, 1.0))
     creator.create("Individual", list, fitness=creator.FitnessMulti)
 
     toolbox = base.Toolbox()
+
+    #CONFIGURAZIONE DI INDIVIDUI E POPOLAZIONE
     toolbox.register("attr_int", random.randint, LOW, UP)
     toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_int, n=NUMEX)
-
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
+
+    #CONFIGURAZIONE DI BASE
+    toolbox.register("select", tools.selTournament, tournsize=3)
     toolbox.register("mate", tools.cxTwoPoint)
     toolbox.register("mutate", tools.mutUniformInt, low=LOW, up=UP, indpb=0.5)
-    toolbox.register("select", tools.selTournament, tournsize=3)
     toolbox.register("evaluate", evaluateInd)
+
+    #ESPERIMENTO, 5 ESECUZIONI DELL'ALGORITMO (PROVARE ANCHE CONF. BASE)
+
+    #CONFIGURAZIONE ESPERIMENTO1
+    # toolbox.register("select", tools.selBest)
+    # toolbox.register("mate", tools.cxTwoPoint)
+    # toolbox.register("mutate", tools.mutUniformInt, low=LOW, up=UP, indpb=0.5)
+    # toolbox.register("evaluate", evaluateInd)
+
+    #CONFIGURAZIONE ESPERIMENTO2
+    # toolbox.register("select", tools.selTournament, tournsize=3)
+    # toolbox.register("mate", tools.cxOnePoint)
+    # toolbox.register("mutate", tools.mutUniformInt, low=LOW, up=UP, indpb=0.5)
+    # toolbox.register("evaluate", evaluateInd)
+
+    #CONFIGURAZIONE ESPERIMENTO3
+    # toolbox.register("select", tools.selBest)
+    # toolbox.register("mate", tools.cxOnePoint)
+    # toolbox.register("mutate", tools.mutUniformInt, low=LOW, up=UP, indpb=0.5)
+    # toolbox.register("evaluate", evaluateInd)
 
     return toolbox
 
@@ -147,16 +172,16 @@ def configuraParametriAlgoritmo():
 def algoritmoSemplice(toolbox):
     pop = toolbox.population(n=POPSIZE)
 
-    hof = tools.HallOfFame(4)
-
     print("Initial population:")
     for p in pop:
         print(str(p) + "" + str(p.fitness))
 
     print()
 
+    hof = tools.HallOfFame(4)
+
     for g in range(NGEN):
-        print("GEN " + str(g))
+        # print("GEN " + str(g))
 
         # SELEZIONE
         offspring = toolbox.select(pop, MATPOOL)
@@ -201,21 +226,27 @@ def algoritmoSemplice(toolbox):
         # MEMORIZZAZIONE DELLA NUOVA POPOLAZIONE
         pop[:] = offspring
 
-        print("Post evaluation:")
-        for p in pop:
-            print(str(p) + "" + str(p.fitness))
-
-        print()
+        # print("Post evaluation:")
+        # for p in pop:
+        #     print(str(p) + "" + str(p.fitness))
+        #
+        # print()
 
         # MEMORIZZAZIONE DEL MIGLIOR INDIVIDUO
         hof.update(pop)
 
-    for h in hof:
-        print(str(h) + "" + str(h.fitness))
-
-    print()
-
+    # for h in hof:
+    #     print(str(h) + "" + str(h.fitness))
+    #
+    # print()
+    #
     print("Best Individual: " + str(hof[0]) + str(hof[0].fitness))
+
+    best = hof[0]
+
+    for b in best:
+        es = eserciziPopulator.getEsercizioByID(b)
+        print(es.printEsercizio())
 
     input("Premi un tasto per continuare...")
 
@@ -265,12 +296,6 @@ def modificaInfoAtleta(n):
     if n == 4:
         mesiEsperienza = int(input("Inserisci i tuoi mesi di esperienza nel fitness: "))
         myAtleta.mesiEsperienza = mesiEsperienza
-
-
-def testScheda():
-    esercizi = [60, 54, 40, 71, 54, 65]
-
-    evaluateInd(esercizi)
 
 
 def menu():
