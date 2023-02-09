@@ -140,27 +140,27 @@ def configuraParametriAlgoritmo():
     toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_int, n=NUMEX)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
-    #CONFIGURAZIONE DI BASE
-    toolbox.register("select", tools.selTournament, tournsize=3)
-    toolbox.register("mate", tools.cxTwoPoint)
-    toolbox.register("mutate", tools.mutUniformInt, low=LOW, up=UP, indpb=0.5)
-    toolbox.register("evaluate", evaluateInd)
-
-    #ESPERIMENTO, 5 ESECUZIONI DELL'ALGORITMO (PROVARE ANCHE CONF. BASE)
+    #ESPERIMENTO, 5 ESECUZIONI DELL'ALGORITMO
 
     #CONFIGURAZIONE ESPERIMENTO1
-    # toolbox.register("select", tools.selBest)
+    # toolbox.register("select", tools.selTournament, tournsize=3)
     # toolbox.register("mate", tools.cxTwoPoint)
     # toolbox.register("mutate", tools.mutUniformInt, low=LOW, up=UP, indpb=0.5)
     # toolbox.register("evaluate", evaluateInd)
 
-    #CONFIGURAZIONE ESPERIMENTO2
+    #CONFIGURAZIONE ESPERIMENTO2 (vincente!)
+    toolbox.register("select", tools.selBest)
+    toolbox.register("mate", tools.cxTwoPoint)
+    toolbox.register("mutate", tools.mutUniformInt, low=LOW, up=UP, indpb=0.5)
+    toolbox.register("evaluate", evaluateInd)
+
+    #CONFIGURAZIONE ESPERIMENTO3
     # toolbox.register("select", tools.selTournament, tournsize=3)
     # toolbox.register("mate", tools.cxOnePoint)
     # toolbox.register("mutate", tools.mutUniformInt, low=LOW, up=UP, indpb=0.5)
     # toolbox.register("evaluate", evaluateInd)
 
-    #CONFIGURAZIONE ESPERIMENTO3
+    #CONFIGURAZIONE ESPERIMENTO4
     # toolbox.register("select", tools.selBest)
     # toolbox.register("mate", tools.cxOnePoint)
     # toolbox.register("mutate", tools.mutUniformInt, low=LOW, up=UP, indpb=0.5)
