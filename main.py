@@ -172,11 +172,11 @@ def configuraParametriAlgoritmo():
 def algoritmoSemplice(toolbox):
     pop = toolbox.population(n=POPSIZE)
 
-    print("Initial population:")
-    for p in pop:
-        print(str(p) + "" + str(p.fitness))
-
-    print()
+    # print("Initial population:")
+    # for p in pop:
+    #     print(str(p) + "" + str(p.fitness))
+    #
+    # print()
 
     hof = tools.HallOfFame(4)
 
@@ -232,7 +232,7 @@ def algoritmoSemplice(toolbox):
         #
         # print()
 
-        # MEMORIZZAZIONE DEL MIGLIOR INDIVIDUO
+        # MEMORIZZAZIONE DEL MIGLIOR INDIVIDUO DELLA GENERAZIONE
         hof.update(pop)
 
     # for h in hof:
@@ -247,6 +247,7 @@ def algoritmoSemplice(toolbox):
     for b in best:
         es = eserciziPopulator.getEsercizioByID(b)
         print(es.printEsercizio())
+        print()
 
     input("Premi un tasto per continuare...")
 
